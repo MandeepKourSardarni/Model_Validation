@@ -30,13 +30,24 @@ The lesson that runs through the whole notebook: **a model that looks ~70% accur
 
 ## What's inside
 
-- **Conceptual soundness & data quality** — sanity-checking the features and the data before trusting anything.
+- **Conceptual soundness & data quality** — sanity-checking the features and the data before trusting anything (missing values, duplicates, and whether risk behaves the way common sense expects).
 - **Model build** — a clean scikit-learn `Pipeline` (scaling + one-hot encoding + Logistic Regression), with all preprocessing fit only on the training data to prevent leakage.
 - **The right metrics** — exposing the accuracy trap, then judging the model on recall, precision, ROC-AUC, a confusion matrix, and a **business-cost** view (a missed bad loan is treated as 5× more costly than a false alarm, per the classic German Credit cost rule).
 - **Reproducibility** — a fixed random seed plus cross-validation to confirm results repeat and aren't a lucky split.
-- **Robustness** — adding small noise to the inputs and re-testing across multiple splits to confirm the model is stable, not jumpy.
+- **Robustness** — adding small (~5%) noise to the inputs and re-testing across multiple splits to confirm the model is stable, not jumpy.
 - **Fairness** — comparing flag rates and *false-rejection rates* across age groups to check the model isn't penalising age rather than real risk.
 - **Validation summary** — a model-risk style report card with a pass / caution / flag verdict on each check.
+
+---
+
+## How this maps to real model-risk standards
+
+The five checks above aren't arbitrary — they're the working bank frameworks in plain language:
+
+- **SR 11-7** (US Federal Reserve / OCC) — the global benchmark for model risk management, built on *conceptual soundness*, *outcomes analysis*, *ongoing monitoring*, and *effective challenge* by an independent party.
+- **OSFI Guideline E-23 — Model Risk Management** (Canada) — takes effect **May 1, 2027** and explicitly covers **AI/ML models** at federally regulated institutions, with expectations around governance, data quality, independent review, and monitoring.
+
+Mapping the work to these standards is the point: *conceptual soundness → Check 1*, *right metrics & business cost → Check 2*, *reproducibility & stability → Checks 3–4*, *fairness & ongoing review → Check 5*.
 
 ---
 
@@ -65,10 +76,15 @@ Then use **Kernel ▸ Restart & Run All** so every cell runs top to bottom in or
 
 ## Possible extensions
 
-Natural next steps to deepen the validation: benchmarking against a challenger model (e.g. a random forest), adding explainability (coefficient or SHAP analysis of the decision drivers), and tuning the decision threshold to minimise the weighted business cost.
+Natural next steps to deepen the validation:
+
+- **Challenger model** — benchmark the Logistic Regression against a random forest or gradient boosting model, then validate *that* too.
+- **Explainability** — add coefficient or SHAP analysis to show *which* features drive each decision.
+- **Threshold tuning** — pick the decision cut-off that minimises the weighted business cost, rather than defaulting to 0.5.
 
 ---
 
 ## Key takeaway
 
 Model validation isn't about building the fanciest model — it's about asking *"can we actually trust this?"* across conceptual soundness, the right metrics, reproducibility, robustness, and fairness, and then **explaining the answer clearly** to people who aren't technical. Turning a technical finding into a plain-language risk verdict is the heart of the job.
+
